@@ -10,7 +10,7 @@ import (
 
 // RunespaceErrorType — runespace probe error classification.
 // Python: server.py:L655-672 (string pattern matching — Python).
-// Go: gRPC status.Code() enum based (spec/components/envector.md "의도적 차이").
+// Go: gRPC status.Code() enum based.
 type RunespaceErrorType string
 
 const (

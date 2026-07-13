@@ -127,7 +127,7 @@ type DiagnosticsResult struct {
 	Keys          KeysInfo      `json:"keys"`
 	Pipelines     PipelinesInfo `json:"pipelines"`
 	Embedding     EmbeddingInfo `json:"embedding"`
-	Runespace     RunespaceInfo `json:"envector"`
+	Runespace     RunespaceInfo `json:"runespace"`
 }
 
 // EnvInfo — OS, Go runtime version, cwd.
@@ -203,7 +203,7 @@ type RunespaceInfo struct {
 	Hint      string  `json:"hint,omitempty"`
 }
 
-// DiagnosticsTimeout — Python ENVECTOR_DIAGNOSIS_TIMEOUT (server.py:L633). 5s.
+// DiagnosticsTimeout — Python RUNESPACE_DIAGNOSIS_TIMEOUT (server.py:L633). 5s.
 const DiagnosticsTimeout = 5 * time.Second
 
 // Diagnostics collects all 7 sections + derives top-level OK.
@@ -885,7 +885,7 @@ type ReloadPipelinesResult struct {
 	// is available; nil otherwise.
 	LastBootError   *domain.BootError `json:"last_boot_error,omitempty"`
 	Errors          []string          `json:"errors,omitempty"`
-	RunespaceWarmup *WarmupInfo       `json:"envector_warmup,omitempty"`
+	RunespaceWarmup *WarmupInfo       `json:"runespace_warmup,omitempty"`
 }
 
 // WarmupInfo — GetIndexList probe (60s timeout).

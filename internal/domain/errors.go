@@ -11,8 +11,8 @@ const (
 	CodeInternal            = "INTERNAL_ERROR"
 	CodeVaultConnection     = "VAULT_CONNECTION_ERROR"
 	CodeVaultDecryption     = "VAULT_DECRYPTION_ERROR"
-	CodeRunespaceConnection = "ENVECTOR_CONNECTION_ERROR"
-	CodeRunespaceInsert     = "ENVECTOR_INSERT_ERROR"
+	CodeRunespaceConnection = "RUNESPACE_CONNECTION_ERROR"
+	CodeRunespaceInsert     = "RUNESPACE_INSERT_ERROR"
 	CodePipelineNotReady    = "PIPELINE_NOT_READY"
 	CodeInvalidInput        = "INVALID_INPUT"
 	CodeTopKLimit           = "TOPK_LIMIT"           // top_k exceeds the vault token's role limit (distinct from generic INVALID_INPUT)

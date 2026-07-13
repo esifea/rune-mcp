@@ -321,7 +321,7 @@ func applyPhaseFallback(be *domain.BootError, c BootErrCtx) {
 		be.Hint = "Embedder daemon (runed) is not reachable on its UDS socket. Start it with `runed start`."
 	case domain.BootPhaseRunespaceInit:
 		be.Kind = domain.BootErrRunespaceInit
-		be.Hint = "Runespace client could not be initialized — check the manifest's envector_endpoint and api_key."
+		be.Hint = "Runespace client could not be initialized — check the manifest's runespace_endpoint and api_key."
 	case domain.BootPhaseRunespaceIndex:
 		be.Kind = domain.BootErrRunespaceIndex
 		be.Hint = "Runespace index could not be opened. The index may be missing on the server, or auth failed."
