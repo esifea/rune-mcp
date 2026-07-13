@@ -49,8 +49,6 @@ const (
 
 	// ── Post-Vault adapters ──────────────────────────────────────────
 	BootErrEmbedderUnreachable BootErrorKind = "embedder_unreachable" // UDS socket missing / runed down
-	BootErrRunespaceInit       BootErrorKind = "runespace_init"        // runespace.NewClient failed
-	BootErrRunespaceIndex      BootErrorKind = "runespace_index"       // OpenIndex failed
 	BootErrKeySave             BootErrorKind = "key_save"             // SaveEncKey / KeyDir filesystem failure
 	BootErrLocalIO             BootErrorKind = "local_io"             // generic local FS / permissions
 )
@@ -60,14 +58,12 @@ const (
 type BootPhase string
 
 const (
-	BootPhaseConfigLoad     BootPhase = "config_load"
-	BootPhaseConfigCheck    BootPhase = "config_check"
-	BootPhaseVaultDial      BootPhase = "vault_dial"
-	BootPhaseVaultManifest  BootPhase = "vault_manifest"
-	BootPhaseKeySave        BootPhase = "key_save"
-	BootPhaseEmbedderDial   BootPhase = "embedder_dial"
-	BootPhaseRunespaceInit  BootPhase = "runespace_init"
-	BootPhaseRunespaceIndex BootPhase = "runespace_index"
+	BootPhaseConfigLoad    BootPhase = "config_load"
+	BootPhaseConfigCheck   BootPhase = "config_check"
+	BootPhaseVaultDial     BootPhase = "vault_dial"
+	BootPhaseVaultManifest BootPhase = "vault_manifest"
+	BootPhaseKeySave       BootPhase = "key_save"
+	BootPhaseEmbedderDial  BootPhase = "embedder_dial"
 )
 
 // BootError — surfaced via diagnostics.vault.last_boot_error.

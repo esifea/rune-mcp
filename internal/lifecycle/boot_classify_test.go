@@ -145,16 +145,6 @@ func TestClassifyBootError_PhaseFallback_EmbedderDial(t *testing.T) {
 	}
 }
 
-func TestClassifyBootError_PhaseFallback_RunespaceIndex(t *testing.T) {
-	be := ClassifyBootError(
-		fmt.Errorf("unknown index error"),
-		BootErrCtx{Phase: domain.BootPhaseRunespaceIndex},
-	)
-	if be.Kind != domain.BootErrRunespaceIndex {
-		t.Fatalf("kind: got %q want %q", be.Kind, domain.BootErrRunespaceIndex)
-	}
-}
-
 func TestClassifyBootError_FullyUnknown(t *testing.T) {
 	be := ClassifyBootError(
 		fmt.Errorf("totally novel error"),

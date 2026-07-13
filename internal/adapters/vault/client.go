@@ -17,7 +17,7 @@ import (
 	"log/slog"
 	"time"
 
-	vaultpb "github.com/CryptoLabInc/rune-admin/vault/pkg/vaultpb"
+	vaultpb "github.com/CryptoLabInc/rune-console/vault/pkg/vaultpb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
