@@ -266,13 +266,13 @@ const (
 //   - config.State="dormant"          → terminal Dormant (user explicit)
 //   - vault endpoint/token empty      → terminal Dormant (await /rune:configure)
 //   - vault dial / GetAgentManifest   → state=WaitingForVault, exp backoff retry
-//   - keymanager / embedder / envector init → exp backoff retry (might be
+//   - keymanager / embedder / runespace init → exp backoff retry (might be
 //     transient — daemon down, etc.)
 //   - other config error (parse fail) → exp backoff retry (user might be editing)
 //   - ctx cancellation                → return immediately
 //
 // Every attempt that fails after a successful Vault dial closes the partial
-// adapter conns it created (vault, embedder, envector) before retrying so
+// adapter conns it created (vault, embedder, runespace) before retrying so
 // gRPC connections do not leak across retries.
 func RunBootLoop(ctx context.Context, m *Manager, deps BootAdapterInjector) {
 	m.SetState(StateStarting)

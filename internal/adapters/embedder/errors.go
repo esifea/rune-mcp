@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// Mirrors vault.Error and envectorError
+// Mirrors vault.Error and runespaceError
 type Error struct {
 	Code      string
 	Message   string

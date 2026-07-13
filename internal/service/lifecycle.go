@@ -127,7 +127,7 @@ type DiagnosticsResult struct {
 	Keys          KeysInfo      `json:"keys"`
 	Pipelines     PipelinesInfo `json:"pipelines"`
 	Embedding     EmbeddingInfo `json:"embedding"`
-	Envector      EnvectorInfo  `json:"envector"`
+	Runespace     RunespaceInfo `json:"envector"`
 }
 
 // EnvInfo — OS, Go runtime version, cwd.
@@ -193,8 +193,8 @@ type EmbeddingInfo struct {
 	HealthError   string `json:"health_error,omitempty"`
 }
 
-// EnvectorInfo — reachability probe
-type EnvectorInfo struct {
+// RunespaceInfo — reachability probe
+type RunespaceInfo struct {
 	Reachable bool    `json:"reachable"`
 	LatencyMs float64 `json:"latency_ms,omitempty"`
 	Error     string  `json:"error,omitempty"`
@@ -251,8 +251,8 @@ func (s *LifecycleService) Diagnostics(ctx context.Context) *DiagnosticsResult {
 	// Embedding
 	r.Embedding = s.collectEmbedding(ctx, DiagnosticsTimeout)
 
-	// Envector
-	r.Envector = s.collectEnvector(ctx, DiagnosticsTimeout)
+	// Runespace
+	r.Runespace = s.collectRunespace(ctx, DiagnosticsTimeout)
 
 	if s.Vault != nil && !r.Vault.Healthy {
 		r.OK = false
@@ -329,17 +329,17 @@ func (s *LifecycleService) collectEmbedding(ctx context.Context, timeout time.Du
 	return info
 }
 
-func (s *LifecycleService) collectEnvector(ctx context.Context, timeout time.Duration) EnvectorInfo {
+func (s *LifecycleService) collectRunespace(ctx context.Context, timeout time.Duration) RunespaceInfo {
 	if s.Vault == nil {
-		return EnvectorInfo{}
+		return RunespaceInfo{}
 	}
-	info, _ := s.probeEnvector(ctx, timeout)
+	info, _ := s.probeRunespace(ctx, timeout)
 	return info
 }
 
-// probeEnvector reports runespace reachability via the vault (mcp no longer
+// probeRunespace reports runespace reachability via the vault (mcp no longer
 // talks to the vector engine directly — the vault is the sole client).
-func (s *LifecycleService) probeEnvector(ctx context.Context, timeout time.Duration) (EnvectorInfo, error) {
+func (s *LifecycleService) probeRunespace(ctx context.Context, timeout time.Duration) (RunespaceInfo, error) {
 	ctx2, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
@@ -355,13 +355,13 @@ func (s *LifecycleService) probeEnvector(ctx context.Context, timeout time.Durat
 	case probeErr := <-ch:
 		elapsed := time.Since(t0)
 		if probeErr == nil {
-			return EnvectorInfo{
+			return RunespaceInfo{
 				Reachable: true,
 				LatencyMs: float64(elapsed.Milliseconds()),
 			}, nil
 		}
-		errType, hint := ClassifyEnvectorError(probeErr, elapsed)
-		return EnvectorInfo{
+		errType, hint := ClassifyRunespaceError(probeErr, elapsed)
+		return RunespaceInfo{
 			Error:     probeErr.Error(),
 			ErrorType: string(errType),
 			Hint:      hint,
@@ -369,12 +369,12 @@ func (s *LifecycleService) probeEnvector(ctx context.Context, timeout time.Durat
 		}, probeErr
 	case <-ctx2.Done():
 		elapsed := time.Since(t0)
-		return EnvectorInfo{
+		return RunespaceInfo{
 			Error: fmt.Sprintf(
 				"Health check timed out after %.0fs (elapsed: %.1fms).",
 				timeout.Seconds(), float64(elapsed.Milliseconds()),
 			),
-			ErrorType: string(EnvErrTimeout),
+			ErrorType: string(RunespaceErrTimeout),
 			ElapsedMs: float64(elapsed.Milliseconds()),
 		}, ctx2.Err()
 	}
@@ -883,9 +883,9 @@ type ReloadPipelinesResult struct {
 	// needed for the common case of "reload finished, boot failed, here's
 	// why". Populated only when state != "active" AND a classified error
 	// is available; nil otherwise.
-	LastBootError  *domain.BootError `json:"last_boot_error,omitempty"`
-	Errors         []string          `json:"errors,omitempty"`
-	EnvectorWarmup *WarmupInfo       `json:"envector_warmup,omitempty"`
+	LastBootError   *domain.BootError `json:"last_boot_error,omitempty"`
+	Errors          []string          `json:"errors,omitempty"`
+	RunespaceWarmup *WarmupInfo       `json:"envector_warmup,omitempty"`
 }
 
 // WarmupInfo — GetIndexList probe (60s timeout).
@@ -898,7 +898,7 @@ type WarmupInfo struct {
 // WarmupTimeout — Python WARMUP_TIMEOUT (server.py:L1059). 60s.
 const WarmupTimeout = 60 * time.Second
 
-// ReloadPipelines — re-trigger the boot loop from Dormant + warmup envector.
+// ReloadPipelines — re-trigger the boot loop from Dormant + warmup runespace.
 //
 // On a terminal Dormant state (boot loop's goroutine has exited), call
 // Manager.Retrigger to spawn a fresh RunBootLoop bound to the same ctx +
@@ -936,8 +936,8 @@ func (s *LifecycleService) ReloadPipelines(ctx context.Context) (*ReloadPipeline
 	}
 
 	if s.Vault != nil {
-		warmup := s.warmupEnvector(ctx, WarmupTimeout)
-		result.EnvectorWarmup = warmup
+		warmup := s.warmupRunespace(ctx, WarmupTimeout)
+		result.RunespaceWarmup = warmup
 	}
 
 	return result, nil
@@ -977,8 +977,8 @@ func (s *LifecycleService) waitForBootProgress(ctx context.Context, timeout time
 	}
 }
 
-// warmupEnvector — GetIndexList under 60s timeout.
-func (s *LifecycleService) warmupEnvector(ctx context.Context, timeout time.Duration) *WarmupInfo {
+// warmupRunespace — GetIndexList under 60s timeout.
+func (s *LifecycleService) warmupRunespace(ctx context.Context, timeout time.Duration) *WarmupInfo {
 	ctx2, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 

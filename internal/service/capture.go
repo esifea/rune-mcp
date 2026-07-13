@@ -53,11 +53,11 @@ func NewCaptureService() *CaptureService {
 //	Phase 1 (in handler): state gate → PIPELINE_NOT_READY if not active
 //	Phase 2: validate text + parse extracted (Detection + ExtractionResult split)
 //	Phase 3: embedder.EmbedSingle(text_to_embed) — reusable_insight > payload.text
-//	Phase 4: envector.Score → Vault.DecryptScores(top_k=3) → novelty classify
+//	Phase 4: runespace.Score → Vault.DecryptScores(top_k=3) → novelty classify
 //	         near_duplicate (≥0.95) → return {captured:false, novelty{class, score, related}}
 //	         failures non-fatal (server.py:L1370-1372 logger.warning)
-//	Phase 5: policy.BuildPhases → embedder.EmbedBatch(texts) → envector.Seal × N
-//	Phase 6: envector.Insert (atomic batch, D17)
+//	Phase 5: policy.BuildPhases → embedder.EmbedBatch(texts) → runespace.Seal × N
+//	Phase 6: runespace.Insert (atomic batch, D17)
 //	Phase 7: capture_log append (degrade per D19) → respond
 func (s *CaptureService) Handle(ctx context.Context, req *domain.CaptureRequest) (*domain.CaptureResponse, error) {
 	// Phase 2
@@ -183,8 +183,8 @@ func (s *CaptureService) Handle(ctx context.Context, req *domain.CaptureRequest)
 //
 // Future optimizations:
 //   - Phase 3/5 embed: runed.EmbedBatch (N to 1 call)
-//   - Phase 4 score: envector native multi-vector query
-//   - Phase 6 insert: envector.Insert is already batch-native (N to 1 call)
+//   - Phase 4 score: runespace native multi-vector query
+//   - Phase 6 insert: runespace.Insert is already batch-native (N to 1 call)
 func (s *CaptureService) Batch(ctx context.Context, args BatchCaptureArgs) (*BatchCaptureResult, error) {
 	var rawItems []map[string]any
 	if err := json.Unmarshal([]byte(args.Items), &rawItems); err != nil {

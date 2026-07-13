@@ -154,7 +154,7 @@ func Register(srv *sdkmcp.Server, deps *Deps) (err error) {
 		"Query organizational memory by natural-language question.",
 		handleRecall(deps))
 	// delete_capture is HIDDEN for this release. The by-ID lookup (SearchByID)
-	// cannot reliably locate a record — envector exposes no exact-ID retrieval,
+	// cannot reliably locate a record — runespace exposes no exact-ID retrieval,
 	// only vector similarity, so against a populated index soft-delete returns
 	// "not found". Registration is gated to remove the tool from the MCP surface
 	// (no slash command, not callable by the model). The handler
@@ -172,7 +172,7 @@ func Register(srv *sdkmcp.Server, deps *Deps) (err error) {
 		"Probe Vault connectivity and report secure-search mode.",
 		handleVaultStatus(deps))
 	mustAdd(srv, "diagnostics",
-		"Collect a 7-section health snapshot (env / state / vault / keys / pipelines / embedding / envector).",
+		"Collect a 7-section health snapshot (env / state / vault / keys / pipelines / embedding / runespace).",
 		handleDiagnostics(deps))
 	mustAdd(srv, "configure",
 		"Write Vault credentials (endpoint, token, optional ca_cert_path / tls_disable) to $HOME/.rune/config.json and mark state=active.",
@@ -181,7 +181,7 @@ func Register(srv *sdkmcp.Server, deps *Deps) (err error) {
 		"Pre-check then reload_pipelines. Returns status=configure_required if $HOME/.rune/config.json is missing/empty, status=install_pending if the runed socket is absent, otherwise mirrors reload_pipelines.",
 		handleActivate(deps))
 	mustAdd(srv, "reload_pipelines",
-		"Re-initialize Vault + envector pipelines (BOOT replay) with envector warmup.",
+		"Re-initialize Vault + runespace pipelines (BOOT replay) with runespace warmup.",
 		handleReloadPipelines(deps))
 
 	return nil

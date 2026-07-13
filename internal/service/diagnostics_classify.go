@@ -8,20 +8,20 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// EnvectorErrorType — envector probe error classification.
+// RunespaceErrorType — runespace probe error classification.
 // Python: server.py:L655-672 (string pattern matching — Python).
 // Go: gRPC status.Code() enum based (spec/components/envector.md "의도적 차이").
-type EnvectorErrorType string
+type RunespaceErrorType string
 
 const (
-	EnvErrConnectionRefused EnvectorErrorType = "connection_refused"
-	EnvErrAuthFailure       EnvectorErrorType = "auth_failure"
-	EnvErrDeadlineExceeded  EnvectorErrorType = "deadline_exceeded"
-	EnvErrTimeout           EnvectorErrorType = "timeout" // context.WithTimeout deadline
-	EnvErrUnknown           EnvectorErrorType = "unknown"
+	RunespaceErrConnectionRefused RunespaceErrorType = "connection_refused"
+	RunespaceErrAuthFailure       RunespaceErrorType = "auth_failure"
+	RunespaceErrDeadlineExceeded  RunespaceErrorType = "deadline_exceeded"
+	RunespaceErrTimeout           RunespaceErrorType = "timeout" // context.WithTimeout deadline
+	RunespaceErrUnknown           RunespaceErrorType = "unknown"
 )
 
-// ClassifyEnvectorError maps an error (with its elapsed latency) to a typed
+// ClassifyRunespaceError maps an error (with its elapsed latency) to a typed
 // classification + user-facing hint. Used by LifecycleService.Diagnostics.
 //
 // Python match (server.py:L655-672):
@@ -33,20 +33,20 @@ const (
 //
 // Hints (Python exact strings, keep bit-identical for schema)
 // XXX: it seems that ErrDeadlineExcceded can cover ErrTimeout
-func ClassifyEnvectorError(err error, elapsed time.Duration) (EnvectorErrorType, string) {
+func ClassifyRunespaceError(err error, elapsed time.Duration) (RunespaceErrorType, string) {
 	st, ok := status.FromError(err)
 	if !ok {
-		return EnvErrUnknown, fmt.Sprintf("Unexpected envector error (%.1fms): %v", float64(elapsed.Milliseconds()), err)
+		return RunespaceErrUnknown, fmt.Sprintf("Unexpected runespace error (%.1fms): %v", float64(elapsed.Milliseconds()), err)
 	}
 
 	switch st.Code() {
 	case codes.Unavailable:
-		return EnvErrConnectionRefused, "enVector cluster appears unreachable from this host - check network connectivity"
+		return RunespaceErrConnectionRefused, "Runespace cluster appears unreachable from this host - check network connectivity"
 	case codes.Unauthenticated:
-		return EnvErrAuthFailure, "enVector API key was rejected - contact your Vault administrator"
+		return RunespaceErrAuthFailure, "Runespace API key was rejected - contact your Vault administrator"
 	case codes.DeadlineExceeded:
-		return EnvErrDeadlineExceeded, "enVector gRPC deadline exceeded - check network latency to the cluster"
+		return RunespaceErrDeadlineExceeded, "Runespace gRPC deadline exceeded - check network latency to the cluster"
 	default:
-		return EnvErrUnknown, "enVector probe failed after recovery attempt - check network connectivity"
+		return RunespaceErrUnknown, "Runespace probe failed after recovery attempt - check network connectivity"
 	}
 }

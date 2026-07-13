@@ -28,7 +28,7 @@ import (
 // encKey is the byte content of the original pyenvector EncKey.json file
 // (manifest_json field "EncKey.json" carries this as a string). Do NOT
 // re-encode, base64-wrap, or otherwise transform — the cgo unwrap on the
-// envector side parses the original envelope shape and any modification
+// runespace side parses the original envelope shape and any modification
 // breaks it.
 //
 // Empty encKey is treated as a no-op (caller responsibility to validate).
@@ -56,9 +56,9 @@ func SaveEncKey(keyID string, encKey []byte) error {
 	return nil
 }
 
-// KeyDir returns the per-key directory path that envector SDK's
+// KeyDir returns the per-key directory path that runespace SDK's
 // OpenKeysFromFile expects as WithKeyPath: ~/.rune/keys/<keyID>/. This is
-// the directory containing EncKey.json — envector resolves the file
+// the directory containing EncKey.json — runespace resolves the file
 // directly via filepath.Join(keyDir, "EncKey.json").
 func KeyDir(keyID string) (string, error) {
 	runedir, err := config.RuneDir()

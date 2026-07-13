@@ -11,8 +11,8 @@ const (
 	CodeInternal            = "INTERNAL_ERROR"
 	CodeVaultConnection     = "VAULT_CONNECTION_ERROR"
 	CodeVaultDecryption     = "VAULT_DECRYPTION_ERROR"
-	CodeEnvectorConnection  = "ENVECTOR_CONNECTION_ERROR"
-	CodeEnvectorInsert      = "ENVECTOR_INSERT_ERROR"
+	CodeRunespaceConnection = "ENVECTOR_CONNECTION_ERROR"
+	CodeRunespaceInsert     = "ENVECTOR_INSERT_ERROR"
 	CodePipelineNotReady    = "PIPELINE_NOT_READY"
 	CodeInvalidInput        = "INVALID_INPUT"
 	CodeTopKLimit           = "TOPK_LIMIT"           // top_k exceeds the vault token's role limit (distinct from generic INVALID_INPUT)
@@ -36,8 +36,8 @@ var (
 	ErrInternal            = &RuneError{Code: CodeInternal, Retryable: false}
 	ErrVaultConnection     = &RuneError{Code: CodeVaultConnection, Retryable: true}
 	ErrVaultDecryption     = &RuneError{Code: CodeVaultDecryption, Retryable: false}
-	ErrEnvectorConnection  = &RuneError{Code: CodeEnvectorConnection, Retryable: true}
-	ErrEnvectorInsert      = &RuneError{Code: CodeEnvectorInsert, Retryable: true}
+	ErrRunespaceConnection = &RuneError{Code: CodeRunespaceConnection, Retryable: true}
+	ErrRunespaceInsert     = &RuneError{Code: CodeRunespaceInsert, Retryable: true}
 	ErrPipelineNotReady    = &RuneError{Code: CodePipelineNotReady, Retryable: false}
 	ErrInvalidInput        = &RuneError{Code: CodeInvalidInput, Retryable: false}
 	ErrTopKLimit           = &RuneError{Code: CodeTopKLimit, Retryable: false}
